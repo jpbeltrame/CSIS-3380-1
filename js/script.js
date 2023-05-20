@@ -3,6 +3,7 @@ const API_URL = "https://randomuser.me/api/?results=" + SAMPLE_SIZE;
 const PAGE_SIZE = 10;
 
 class Paginator {
+    activePage = 1
     pageSize = 10;
     list = [];
 
@@ -12,7 +13,6 @@ class Paginator {
 
         if (autoLoad) {
             this.renderTotal();
-            this.renderPagination();
             this.renderPage(1);
         }
     }
@@ -39,13 +39,16 @@ class Paginator {
     renderPagination() {
         let html = "";
         for (let i = 1; i <= this.numberOfPages; i++) {
-            html += `<li><a href="javascript:paginator.renderPage(${i})">${i}</a></li>`;
+            let activeClass = i == this.activePage ? "class='active'" : "";
+            html += `<li><a ${activeClass} href="javascript:paginator.renderPage(${i})">${i}</a></li>`;
         }
 
         document.getElementById('contact-list__pagination').innerHTML = html;
     }
 
     renderPage(pageNumber) {
+        this.activePage = pageNumber;
+        this.renderPagination();
         document.getElementById('contact-list__body').innerHTML = this.getPageTemplate(pageNumber);
     }
 
